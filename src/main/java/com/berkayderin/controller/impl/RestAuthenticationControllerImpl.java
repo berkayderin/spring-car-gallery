@@ -9,6 +9,7 @@ import com.berkayderin.controller.IRestAuthenticationController;
 import com.berkayderin.controller.RestBaseController;
 import com.berkayderin.controller.RootEntity;
 import com.berkayderin.dto.AuthRequest;
+import com.berkayderin.dto.AuthResponse;
 import com.berkayderin.dto.DtoUser;
 import com.berkayderin.service.IAuthenticationService;
 
@@ -25,6 +26,12 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
     public RootEntity<DtoUser> register(@Valid @RequestBody AuthRequest input) {
 
         return ok(authenticationService.register(input));
+    }
+
+    @PostMapping("/authenticate")
+    @Override
+    public RootEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest input) {
+        return ok(authenticationService.authenticate(input));
     }
 
 }
