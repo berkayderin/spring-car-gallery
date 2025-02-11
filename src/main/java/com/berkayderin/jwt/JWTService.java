@@ -19,14 +19,12 @@ public class JWTService {
     public static final String SECRET_KEY = "k8c0tDZlY/k8rGiYGIf5lIOyAfNIqvWo8wbIc4cTsmQ=";
 
     public String generateToken(UserDetails userDetails) {
-        Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-        return "";
     }
 
     public <T> T exportToken(String token, Function<Claims, T> claimsFunc) {

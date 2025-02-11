@@ -33,7 +33,7 @@ public class AppConfig {
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 Optional<User> optional = userRepository.findByUsername(username);
 
-                if (optional.isPresent()) {
+                if (!optional.isPresent()) {
                     throw new BaseException(new ErrorMessage(MessageType.USERNAME_NOT_FOUND, username));
                 }
 
