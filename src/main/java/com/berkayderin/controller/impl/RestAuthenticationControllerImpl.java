@@ -11,6 +11,7 @@ import com.berkayderin.controller.RootEntity;
 import com.berkayderin.dto.AuthRequest;
 import com.berkayderin.dto.AuthResponse;
 import com.berkayderin.dto.DtoUser;
+import com.berkayderin.dto.RefreshTokenRequest;
 import com.berkayderin.service.IAuthenticationService;
 
 import jakarta.validation.Valid;
@@ -24,7 +25,6 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
     @PostMapping("/register")
     @Override
     public RootEntity<DtoUser> register(@Valid @RequestBody AuthRequest input) {
-
         return ok(authenticationService.register(input));
     }
 
@@ -32,6 +32,12 @@ public class RestAuthenticationControllerImpl extends RestBaseController impleme
     @Override
     public RootEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest input) {
         return ok(authenticationService.authenticate(input));
+    }
+
+    @PostMapping("/refreshToken")
+    @Override
+    public RootEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest input) {
+        return ok(authenticationService.refreshToken(input));
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.berkayderin.dto.AuthRequest;
 import com.berkayderin.dto.AuthResponse;
 import com.berkayderin.dto.DtoUser;
+import com.berkayderin.dto.RefreshTokenRequest;
 import com.berkayderin.exception.BaseException;
 import com.berkayderin.exception.ErrorMessage;
 import com.berkayderin.exception.MessageType;
@@ -90,6 +91,30 @@ public class AuthencationServiceImpl implements IAuthenticationService {
             throw new BaseException(new ErrorMessage(MessageType.USERNAME_OR_PASSWORD_INVALID, e.getMessage()));
         }
 
+    }
+
+    public boolean isValidRefreshToken(Date expiredDate) {
+        return expiredDate.after(new Date());
+    }
+
+    @Override
+    public AuthResponse refreshToken(RefreshTokenRequest input) {
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository
+                .findByRefreshToken(input.getRefreshToken());
+
+        if (optionalRefreshToken.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_NOT_FOUND, input.getRefreshToken()));
+        }
+
+        if (!isValidRefreshToken(optionalRefreshToken.get().getExpiredDate())) {
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_IS_EXPIRED, input.getRefreshToken()));
+        }
+
+        User user = optionalRefreshToken.get().getUser();
+        String accessToken = jwtService.generateToken(user);
+        RefreshToken savedRefreshToken = refreshTokenRepository.save(createRefreshToken(user));
+
+        return new AuthResponse(accessToken, savedRefreshToken.getRefreshToken());
     }
 
 }
