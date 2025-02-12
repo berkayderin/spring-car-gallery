@@ -13,6 +13,7 @@ public enum MessageType {
     CURRENCY_RATES_IS_OCCURED("1010", "Currency rates is occured"),
     CUSTOMER_AMOUNT_IS_NOT_ENOUGH("1011", "Customer amount is not enough"),
     CAR_STATUS_IS_ALREADY_SALED("1012", "Car status is already saled"),
+    CAR_NOT_FOUND("1013", "Car not found"),
     GENERAL_EXCEPTION("9999", "General exception");
 
     private String code;

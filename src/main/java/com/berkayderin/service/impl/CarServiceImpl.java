@@ -3,6 +3,7 @@ package com.berkayderin.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import com.berkayderin.dto.DtoCarIU;
 import com.berkayderin.model.Car;
 import com.berkayderin.repository.CarRepository;
 import com.berkayderin.service.ICarService;
+import com.berkayderin.exception.BaseException;
+import com.berkayderin.exception.ErrorMessage;
+import com.berkayderin.exception.MessageType;
 
 @Service
 public class CarServiceImpl implements ICarService {
@@ -55,4 +59,14 @@ public class CarServiceImpl implements ICarService {
         return dtoCars;
     }
 
+    @Override
+    public DtoCar getCarById(Long id) {
+        Optional<Car> optionalCar = carRepository.findById(id);
+
+        if (!optionalCar.isPresent()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        }
+
+        return convertToDto(optionalCar.get());
+    }
 }

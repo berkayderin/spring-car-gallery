@@ -9,4 +9,6 @@ public interface ICarService {
     public DtoCar saveCar(DtoCarIU dtoCarIU);
 
     public List<DtoCar> getAllCars();
+
+    public DtoCar getCarById(Long id);
 }
