@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import com.berkayderin.controller.RestBaseController;
 import com.berkayderin.controller.RootEntity;
 import com.berkayderin.dto.DtoCar;
 import com.berkayderin.dto.DtoCarIU;
+import com.berkayderin.dto.DtoCarPriceIU;
 import com.berkayderin.service.ICarService;
 
 import jakarta.validation.Valid;
@@ -41,5 +43,11 @@ public class RestCarControllerImpl extends RestBaseController implements IRestCa
     @Override
     public RootEntity<DtoCar> getCarById(@PathVariable Long id) {
         return ok(carService.getCarById(id));
+    }
+
+    @PutMapping("/car/{id}/price")
+    @Override
+    public RootEntity<DtoCar> updateCarPrice(@PathVariable Long id, @Valid @RequestBody DtoCarPriceIU dtoCarPriceIU) {
+        return ok(carService.updateCarPrice(id, dtoCarPriceIU));
     }
 }

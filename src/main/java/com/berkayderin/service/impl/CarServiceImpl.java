@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.berkayderin.dto.DtoCar;
 import com.berkayderin.dto.DtoCarIU;
+import com.berkayderin.dto.DtoCarPriceIU;
 import com.berkayderin.model.Car;
 import com.berkayderin.repository.CarRepository;
 import com.berkayderin.service.ICarService;
@@ -64,9 +65,25 @@ public class CarServiceImpl implements ICarService {
         Optional<Car> optionalCar = carRepository.findById(id);
 
         if (!optionalCar.isPresent()) {
-            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+            throw new BaseException(new ErrorMessage(MessageType.CAR_NOT_FOUND, id.toString()));
         }
 
         return convertToDto(optionalCar.get());
+    }
+
+    @Override
+    public DtoCar updateCarPrice(Long id, DtoCarPriceIU dtoCarPriceIU) {
+        Optional<Car> optionalCar = carRepository.findById(id);
+
+        if (!optionalCar.isPresent()) {
+            throw new BaseException(new ErrorMessage(MessageType.CAR_NOT_FOUND, id.toString()));
+        }
+
+        Car car = optionalCar.get();
+        car.setPrice(dtoCarPriceIU.getPrice());
+        car.setCurrencyType(dtoCarPriceIU.getCurrencyType());
+
+        Car updatedCar = carRepository.save(car);
+        return convertToDto(updatedCar);
     }
 }
