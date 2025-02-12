@@ -1,6 +1,8 @@
 package com.berkayderin.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,12 @@ public class CarServiceImpl implements ICarService {
         return car;
     }
 
+    private DtoCar convertToDto(Car car) {
+        DtoCar dtoCar = new DtoCar();
+        BeanUtils.copyProperties(car, dtoCar);
+        return dtoCar;
+    }
+
     @Override
     public DtoCar saveCar(DtoCarIU dtoCarIU) {
         DtoCar dtoCar = new DtoCar();
@@ -33,6 +41,18 @@ public class CarServiceImpl implements ICarService {
 
         BeanUtils.copyProperties(savedCar, dtoCar);
         return dtoCar;
+    }
+
+    @Override
+    public List<DtoCar> getAllCars() {
+        List<Car> cars = carRepository.findAll();
+        List<DtoCar> dtoCars = new ArrayList<>();
+
+        for (Car car : cars) {
+            dtoCars.add(convertToDto(car));
+        }
+
+        return dtoCars;
     }
 
 }
