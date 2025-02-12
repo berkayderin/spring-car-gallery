@@ -19,33 +19,40 @@ import com.berkayderin.dto.DtoCarPriceIU;
 import com.berkayderin.service.ICarService;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Araç İşlemleri", description = "Araç yönetimi için API uç noktaları")
 public class RestCarControllerImpl extends RestBaseController implements IRestCarController {
 
     @Autowired
     private ICarService carService;
 
     @PostMapping("/car")
+    @Operation(summary = "Yeni araç ekle", description = "Sisteme yeni bir araç kaydı ekler")
     @Override
     public RootEntity<DtoCar> saveCar(@Valid @RequestBody DtoCarIU dtoCarIU) {
         return ok(carService.saveCar(dtoCarIU));
     }
 
     @GetMapping("/cars")
+    @Operation(summary = "Tüm araçları listele", description = "Sistemdeki tüm araçları listeler")
     @Override
     public RootEntity<List<DtoCar>> getAllCars() {
         return ok(carService.getAllCars());
     }
 
     @GetMapping("/car/{id}")
+    @Operation(summary = "Araç detayı getir", description = "Belirtilen ID'ye sahip aracın detaylarını getirir")
     @Override
     public RootEntity<DtoCar> getCarById(@PathVariable Long id) {
         return ok(carService.getCarById(id));
     }
 
     @PutMapping("/car/{id}/price")
+    @Operation(summary = "Araç fiyatı güncelle", description = "Belirtilen ID'ye sahip aracın fiyatını günceller")
     @Override
     public RootEntity<DtoCar> updateCarPrice(@PathVariable Long id, @Valid @RequestBody DtoCarPriceIU dtoCarPriceIU) {
         return ok(carService.updateCarPrice(id, dtoCarPriceIU));
